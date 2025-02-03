@@ -4,7 +4,13 @@ import TheWelcome from '../components/TheWelcome.vue'
 
 <template>
   <main>
-    <h1></h1>
+    <h1>Make-A-Weapon</h1>
     <TheWelcome />
   </main>
 </template>
+
+<style scoped>
+h1 {
+  text-align: center;
+}
+</style>
