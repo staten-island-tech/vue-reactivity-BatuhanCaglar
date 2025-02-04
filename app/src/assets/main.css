@@ -1,3 +1,10 @@
 @import './base.css';
 
-
+body {
+    width: 100vw; 
+    height: 100vh; 
+    background-image: url('/medieval-blacksmiths-forge-scene-pixel-art-style-fantasy-game-design-creative-projects_91645-10000.avif');
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
+}

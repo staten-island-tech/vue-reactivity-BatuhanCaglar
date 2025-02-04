@@ -12,5 +12,7 @@ import TheWelcome from '../components/TheWelcome.vue'
 <style scoped>
 h1 {
   text-align: center;
+  font-family: 'Handjet', sans-serif;
+  font-optical-sizing: auto;
 }
 </style>
