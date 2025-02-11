@@ -74,4 +74,3 @@ h1 {
   <a href="#item3" class="btn btn-xs">3</a>
   <a href="#item4" class="btn btn-xs">4</a>
 </div>
-</style>
