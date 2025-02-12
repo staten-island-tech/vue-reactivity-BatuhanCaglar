@@ -1,0 +1,185 @@
+<template>
+  <div>
+    <div v-if="!selectedWeapon" class="carousel w-full">
+      <div
+        v-for="(weapon, index) in weapons"
+        :key="weapon.name"
+        :id="`item${index + 1}`"
+        class="carousel-item w-full"
+      >
+        <img
+          :src="weapon.image"
+          :alt="weapon.name"
+          class="w-full cursor-pointer"
+          @click="selectWeapon(weapon)"
+        />
+      </div>
+    </div>
+
+    <div v-if="!selectedWeapon" class="flex w-full justify-center gap-2 py-2">
+      <a
+        v-for="(weapon, index) in weapons"
+        :key="weapon.name"
+        :href="`#item${index + 1}`"
+        class="btn btn-xs"
+      >
+        {{ index + 1 }}
+      </a>
+    </div>
+
+    <div v-if="selectedWeapon" class="selected-weapon">
+      <img :src="getWeaponImage()" :alt="selectedWeapon.name" class="w-full" />
+      <h2 class="text-center text-xl font-bold">{{ selectedWeapon.name }}</h2>
+      
+      <div v-if="enchantments.length < 3" class="enchantment-options">
+        <h3>Select an Enchantment:</h3>
+        <div class="flex gap-2">
+          <button v-for="enchantment in availableEnchantments" 
+                  :key="enchantment.name" 
+                  class="btn" 
+                  @click="addEnchantment(enchantment)">
+            <img :src="enchantment.image" :alt="enchantment.name" class="icon"/>
+            {{ enchantment.name }}
+          </button>
+        </div>
+      </div>
+      
+      <div v-if="enchantments.length > 0" class="selected-enchantments">
+        <h3>Selected Enchantments:</h3>
+        <div class="flex gap-2">
+          <div v-for="enchantment in enchantments" :key="enchantment.name" class="enchantment-display">
+            <img :src="enchantment.image" :alt="enchantment.name" class="icon"/>
+            {{ enchantment.name }}
+          </div>
+        </div>
+      </div>
+      
+      <button v-if="enchantments.length > 0" class="btn mt-4" @click="reset">Restart</button>
+      <button v-if="enchantments.length === 3" class="btn mt-4">Finalize</button>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+
+const weapons = [
+  { name: 'Greataxe', image: '/AXE.png', enchantments: {} },
+  { name: 'Longsword', image: '/SWORD.png', enchantments: {} },
+  { name: 'Scythe', image: '/SCYTHE.png', enchantments: {} },
+  { name: 'Mace', image: '/MACE.png', enchantments: {} },
+  { name: 'Spear', image: '/NAGINATA.png', enchantments: {} },
+]
+
+const enchantmentsList = [
+  { name: 'Light', image: '/LIGHT.png' },
+  { name: 'Dark', image: '/DARK.png' },
+  { name: 'Fire', image: '/FIRE.png' },
+  { name: 'Wind', image: '/WIND.png' },
+  { name: 'Lightning', image: '/LIGHTNING.png' },
+]
+
+const selectedWeapon = ref(null)
+const enchantments = ref([])
+
+const weaponImages = {
+  'Greataxe': {
+    'Light': '/AXE_LIGHT.png',
+    'Dark': '/AXE_DARK.png',
+    'Fire': '/AXE_FIRE.png',
+    'Wind': '/AXE_WIND.png',
+    'Lightning': '/AXE_LIGHTNING.png',
+    // Add all 21 combinations here
+  },
+  'Longsword': {
+    'Light': '/SWORD_LIGHT.png',
+    'Dark': '/SWORD_DARK.png',
+    'Fire': '/SWORD_FIRE.png',
+    'Wind': '/SWORD_WIND.png',
+    'Lightning': '/SWORD_LIGHTNING.png',
+    // Add all 21 combinations here
+  }
+}
+
+const selectWeapon = (weapon) => {
+  selectedWeapon.value = weapon
+  enchantments.value = []
+}
+
+const addEnchantment = (enchantment) => {
+  if (enchantments.value.length < 3) {
+    if ((enchantment.name === 'Light' && enchantments.value.some(e => e.name === 'Dark')) ||
+        (enchantment.name === 'Dark' && enchantments.value.some(e => e.name === 'Light'))) {
+      return
+    }
+    enchantments.value.push(enchantment)
+  }
+}
+
+const reset = () => {
+  selectedWeapon.value = null
+  enchantments.value = []
+}
+
+const getWeaponImage = () => {
+  if (!selectedWeapon.value) return ''
+  const key = enchantments.value.map(e => e.name).sort().join('_')
+  return weaponImages[selectedWeapon.value.name]?.[key] || selectedWeapon.value.image
+}
+
+const availableEnchantments = computed(() => {
+  return enchantmentsList.filter(e => 
+    !enchantments.value.includes(e) && 
+    !(enchantments.value.some(en => en.name === 'Light') && e.name === 'Dark') &&
+    !(enchantments.value.some(en => en.name === 'Dark') && e.name === 'Light')
+  )
+})
+</script>
+
+<style scoped>
+.carousel {
+  display: flex;
+  overflow: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+.carousel-item {
+  flex: none;
+  width: 100%;
+  scroll-snap-align: start;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.selected-weapon {
+  text-align: center;
+  margin-top: 20px;
+}
+.btn {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.btn:hover {
+  background-color: #2980b9;
+}
+.icon {
+  width: 40px;
+  height: 40px;
+}
+.enchantment-options, .selected-enchantments {
+  margin-top: 20px;
+}
+.enchantment-display {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #eee;
+  padding: 5px;
+  border-radius: 5px;
+}
+</style>
