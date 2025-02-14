@@ -236,7 +236,7 @@ const resetSelection = () => {
 .btn:hover {
   background-color: #2980b9;
 }
-.btn:disabled {
+set .btn:disabled {
   background-color: #95a5a6;
   cursor: not-allowed;
 }
