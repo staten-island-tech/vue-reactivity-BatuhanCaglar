@@ -20,21 +20,28 @@ export default {
   props: ['weapon', 'enchants'],
   computed: {
     finalWeaponImage() {
-      const weaponMap = { Axe: 'A', Mace: 'M', Scythe: 'Y', Naginata: 'P', Sword: 'S' };
-      const enchantMap = { Dark: 'D', Light: 'L', Fire: 'F', Wind: 'W', Lightning: 'T' };
-      const weaponLetter = weaponMap[this.weapon.name] || '';
-      const folderMap = { Axe: 'axe', Mace: 'mace', Scythe: 'scythe', Naginata: 'spear', Sword: 'sword' };
-      const folder = folderMap[this.weapon.name] || '';
+      const weaponMap = { Axe: 'A', Mace: 'M', Scythe: 'Y', Naginata: 'P', Sword: 'S' }
+      const enchantMap = { Dark: 'D', Light: 'L', Fire: 'F', Wind: 'W', Lightning: 'T' }
+      const weaponLetter = weaponMap[this.weapon.name] || ''
+      const folderMap = {
+        Axe: 'axe',
+        Mace: 'mace',
+        Scythe: 'scythe',
+        Naginata: 'spear',
+        Sword: 'sword',
+      }
+      const folder = folderMap[this.weapon.name] || ''
 
-      // Show base weapon if no enchantments are selected
       if (this.enchants.length === 0) {
-        return `/${folder}/${weaponLetter}.png`;
+        return `/${folder}/${weaponLetter}.png`
       }
 
-      // Otherwise, construct the enchanted weapon image filename
-      const enchantLetters = this.enchants.map(e => enchantMap[e]).sort().join('');
-      return `/${folder}/${weaponLetter}${enchantLetters}.png`;
-    }
+      const enchantLetters = this.enchants
+        .map((e) => enchantMap[e])
+        .sort()
+        .join('')
+      return `/${folder}/${weaponLetter}${enchantLetters}.png`
+    },
   },
   methods: {
     getEnchantImage(enchant) {
@@ -43,17 +50,15 @@ export default {
         Light: '/lightball.png',
         Fire: '/fireballpic.webp',
         Wind: '/windpic.png',
-        Lightning: '/lightbolt.png'
-      };
-      return enchantImages[enchant] || '';
-    }
-  }
-};
+        Lightning: '/lightbolt.png',
+      }
+      return enchantImages[enchant] || ''
+    },
+  },
+}
 </script>
 
-
 <style>
-
 .final-display {
   text-align: center;
 }
@@ -84,16 +89,15 @@ export default {
   cursor: pointer;
   font-size: 1.2rem;
 }
-h4{
-  font-family: "Handjet", sans-serif;
+h4 {
+  font-family: 'Handjet', sans-serif;
   font-optical-sizing: auto;
   font-size: xx-large;
 }
 
-p{
-  font-family: "Rajdhani", sans-serif;
+p {
+  font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
   font-style: normal;
 }
-
-</style> 
+</style>
